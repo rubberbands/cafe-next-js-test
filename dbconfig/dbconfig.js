@@ -4,7 +4,7 @@ const config = {
   host: 'localhost',
   port: 3306,
   user: 'root',
-  database: 'test',
+  database: 'commsult_tpm',
   connectionLimit: 100,
 }
 

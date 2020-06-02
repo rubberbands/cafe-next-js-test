@@ -1,27 +1,48 @@
 import React from 'react'
+import { makeStyles } from '@material-ui/core/styles';
 import Layout from '../components/Layout';
-import Employee from '../components/Employee';
-import Link from 'next/link'
+import Router from 'next/router';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
+const useStyles = makeStyles({
+    root: {
+      minWidth: 275,
+    },
+    bullet: {
+      display: 'inline-block',
+      margin: '0 2px',
+      transform: 'scale(0.8)',
+    },
+    title: {
+      fontSize: 14,
+    },
+    pos: {
+      marginBottom: 12,
+    },
+  });
 export default class extends React.Component {
-
+    
     constructor(props) {
         super(props)
         this.state = {
-            employees : []
+            views : []
         }
         this.handleDelete = this.handleDelete.bind(this)
+        console.log(this.state)
     }
 
     async componentDidMount() {
-        this.getEmployees()
+        this.getViews()
     }
 
-    getEmployees() {
-        fetch('/api/employees')
+    getViews(){
+        fetch('/api/views')
         .then(res => res.json())
         .then(response => {
-          this.setState({employees : response.employees})
+          this.setState({views : response.views})
         })
     }
 
@@ -40,19 +61,29 @@ export default class extends React.Component {
     }
 
     render() {
+        
         return(
             <Layout {...this.props}>
-            <Link href={{ pathname: '/new' }}>New</Link>
-            {
-            this.state.employees.map(
-                (employee, key) => 
-                    <div>
-                        <Employee id={key} data={employee} />
-                        {/* <button onClick={(e) => this.handleDelete(e, {employee})}> Delete Employee</button> */}
-                        <button type="submit" onClick={this.handleDelete} value={employee.id}>Delete</button>
-                    </div>
-                )
-            }
+                <br/>
+                <Card style={{maxWidth: 275}}>
+                    <CardContent>
+                        <Typography variant="h6" component="h2">
+                            Main Menu
+                        </Typography>
+                        <hr/>
+                {
+                    this.state.views.length != 0 ? 
+                    (this.state.views.map(
+                        (view, key) => 
+                            <Typography key={key} onClick={() => Router.push('/list/[view]', '/list/'+ view)}>
+                                {view} 
+                            </Typography>
+                    )) : (
+                        <span>none</span>
+                    )
+                }
+                    </CardContent>
+                </Card>
             </Layout>
         )
     }

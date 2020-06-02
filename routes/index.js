@@ -1,4 +1,6 @@
 const pool = require('../dbconfig/dbconfig')
+const glob = require('glob')
+var path = require('path')
 
 module.exports = (server) => {
     if (server === null) {
@@ -98,6 +100,42 @@ module.exports = (server) => {
     async function updateEmployee(id, name, address, email) {
         try {
           const results = await pool.query(`UPDATE employee SET name='${name}', address='${address}', email='${email}' WHERE id='${id}';`)
+          return results
+        }catch(e){
+          console.error(e)
+        }
+    }
+
+    server.get('/api/views', async (req, res) => {
+        glob('xml/*.xml', function (err, files) {
+            if (err) {
+                console.log(err);
+            } else {
+                var views = [];
+                console.log(files);
+                for(i = 0; i < files.length; i++) {
+                    views.push(path.basename(files[i]).split('.').slice(0, -1).join('.'))
+                    console.log(path.basename(files[i]).split('.').slice(0, -1).join('.'))
+                }
+                res.json({views : views})
+            }
+        })
+    })
+
+    server.post('/api/data', async (req, res) => {
+        var column = req.body.column
+        var table = req.body.table
+        const results = await getData(column, table)
+        if(results){
+            return res.json({data : results[0]})
+        } else {
+            return res.json({message: 'No Data'})
+        }
+    })
+
+    async function getData(column, table) {
+        try {
+          const results = await pool.query(`SELECT * FROM ${table}`)
           return results
         }catch(e){
           console.error(e)

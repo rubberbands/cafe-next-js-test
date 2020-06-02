@@ -1,0 +1,198 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<view xmlns='http://www.commsult.de' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.commsult.de http://schema.commsult.de/cafe-view.xsd'>
+  <!--//////////////////////////////////////////////// -->
+  <!--////////////////////Sections//////////////////// -->
+  <!--//////////////////////////////////////////////// -->
+  <sections>
+    <section position='1' key='users' type='normal' labelname='users'/>
+    <section position='1' key='user' type='normal' labelname='user' dataplugin='user_detail'>
+      <links>
+        <link name='user_account_status_lock' usesave='true' linkplugin='user_account_status_lock' visible='${user.id ne 1 and user.status eq [enum:UserStatus.ACTIVE]}'/>
+        <link name='user_account_status_unlock' usesave='true' linkplugin='user_account_status_unlock' visible='${user.status eq [enum:UserStatus.LOCKED]}'/>
+        <link name='user_account_status_sendlogin' usesave='true' linkplugin='user_account_status_sendlogin' visible='${user.status eq [enum:UserStatus.ACTIVE]}'/>
+      </links>
+    </section>
+    <section position='2' key='user_team' labelname='teams' type='list' linkfield='user.id' newlink='false' detailview='teamdetail' detailview-view='team' assignmentlink='true' deassignmentlink='true' linktablelinkid='team2user.fkuserid' linktableoutputid='team2user.fkteamid'/>
+    <section position='3' key='user_user_group' labelname='user_groups' type='list' linkfield='user.id' newlink='false' detailview='user_groupdetail' detailview-view='user_group' assignmentlink='true' deassignmentlink='true' linktablelinkid='user_group2user.fkuserid' linktableoutputid='user_group2user.fkuser_groupid'/>
+    <section position='4' key='user_project' type='list' labelname='projects' linkfield='user.id' detailview='projectdetail' detailview-view='project' newlink='false' assignmentlink='true' deassignmentlink='true' linktablelinkid='project2user.fkuserid' linktableoutputid='project2user.fkprojectid'/> 
+    <section position='5' key='user_securitygroup' labelname='securitygroups' type='list' linkfield='user.id' newlink='false' detailview-view='securitygroup' assignmentlink='true' deassignmentlink='true' linktablelinkid='user2securitygroup.fkuserid' linktableoutputid='user2securitygroup.fksecuritygroupid' visible='${security_by_user eq 1}'/>
+  </sections>
+  <filteroptions newlink='true' detailview='userdetail' detailview-view='user'/>
+  <listoptions detailview='userdetail' detailview-view='user' newlink='true'/>
+  <!--//////////////////////////////////////////////// -->
+  <!--////////////////////Listfields////////////////// -->
+  <!--//////////////////////////////////////////////// -->
+  <listfields head='list'>
+    <field name='user.id' section='users'>
+      <listproperties visible='false' keyfield='true' listconfig='false'/>
+    </field>
+    <field name='user.lastname' section='users'>
+      <listproperties size='200' indexfield='true'/>
+    </field>
+    <field name='user.firstname' section='users'>
+      <listproperties size='150'/>
+    </field>
+    <field name='user.email' section='users'>
+      <listproperties size='200'/>
+    </field>
+    <field name='user.login' section='users'>
+      <listproperties size='100'/>
+    </field>
+    <field name='user.status' section='users'>
+      <label name='status'/>
+      <xmllink filepath='masterdata/user_status.xml'/>
+      <listproperties size='75'/>
+    </field>
+    <field name='user.lastlogin' section='users'>
+      <listproperties size='150'/>
+    </field>
+  </listfields>
+  <!--//////////////////////////////////////////////// -->
+  <!--////////////////////Detailviews///////////////// -->
+  <!--//////////////////////////////////////////////// -->
+  <detailviews>
+    <!--////////////////////Detailview Benutzer//////////////////// -->
+    <detailview name='userdetail' head='detail' savelink='true' dellink='true' dellinkplausibility='!isone' dellinkreference='user.id'>
+      <field name='user.id' section='user'>
+        <detailproperties visible='false' keyfield='true'/>
+      </field>
+      <field name='user.firstname' section='user'>
+        <detailproperties row='1' col='1' size='100' type='text' editable='${is_admin eq 1}'/>
+      </field>
+      <field name='user.lastname' section='user'>
+        <detailproperties row='1' col='2' size='200' type='text' needed='true' editable='${is_admin eq 1}'/>
+      </field>
+      <field name='user.isAdmin' section='user'>
+        <label name='admin'/>
+        <detailproperties row='1' col='3' size='200' type='check' editable='${is_admin eq 1}'/>
+      </field>
+      <field name='user.login' section='user'>
+        <detailproperties row='2' col='1' size='150' type='text' needed='true' editable='${is_admin eq 1}'/>
+      </field>
+      <field name='user.lastlogin' section='user'>
+        <detailproperties row='2' col='2' size='120' editable='false'/>
+      </field>
+      <field name='user.status' section='user'>
+        <label name='status'/>
+        <detailproperties row='2' col='3' size='75' memorows='10' type='combo' editable='false'/>
+        <xmllink filepath='masterdata/user_status.xml'/>
+      </field>
+      <field name='user.email' section='user'>
+        <detailproperties row='3' col='1' size='250' type='text' needed='true' editable='${is_admin eq 1}'/>
+      </field>
+      <field name='user.phone' section='user'>
+        <detailproperties row='3' col='2' size='250' type='text' editable='${is_admin eq 1}'/>
+      </field>
+      <field name='user.adddate' section='user'>
+        <label name='adddate'/>
+        <detailproperties row='10' col='1' size='120' editable='false' type='text'/>
+      </field>
+      <field name='user.fkadduser' section='user'>
+        <label name='adduser'/>
+        <detailproperties row='10' col='2' size='150' type='text' editable='false'/>
+        <link keyfield='user.id' outputfield='$user.lastname$, $user.firstname$'/>
+      </field>
+      <field name='user.changedate' section='user'>
+        <label name='changedate'/>
+        <detailproperties row='10' col='3' size='120' editable='false' type='text'/>
+      </field>
+      <field name='user.fkchangeuser' section='user'>
+        <label name='changeuser'/>
+        <detailproperties row='10' col='4' size='150' type='text' editable='false'/>
+        <link keyfield='user.id' outputfield='$user.lastname$, $user.firstname$'/>
+      </field>
+      <!--////////////////////Liste Berechtigungsgruppen//////////////////// -->
+      <field name='team2user.id' section='user_team'>
+        <detailproperties visible='false' keyfield='true' deassignmentkeyfield='true'/>
+      </field>
+      <field name='team2user.fkuserid' section='user_team'>
+        <detailproperties visible='false' linkfield='true'/>
+      </field>
+      <field name='team.name' section='user_team'>
+        <label name='name'/>
+        <detailproperties size='200' indexfield='true'/>
+      </field>
+      <!--////////////////////Liste Benutzergruppe//////////////////// -->
+      <field name='user_group2user.id' section='user_user_group'>
+        <detailproperties visible='false' keyfield='true' deassignmentkeyfield='true'/>
+      </field>
+      <field name='user_group2user.fkuserid' section='user_user_group'>
+        <detailproperties visible='false' linkfield='true'/>
+      </field>
+      <field name='user_group.name' section='user_user_group'>
+        <label name='name'/>
+        <detailproperties size='200' indexfield='true'/>
+      </field>
+      <!--////////////////////Linkliste projekt//////////////////// -->
+      <field name='project2user.fkuserid' section='user_project'>
+        <detailproperties visible='false' linkfield='true'/>
+      </field>
+      <field name='project2user.id' section='user_project'>
+        <detailproperties visible='false' deassignmentkeyfield='true'/>
+      </field>
+      <field name='project.id' section='user_project'>
+        <detailproperties visible='false' keyfield='true'/>
+      </field>
+      <field name='project.name' section='user_project'>
+        <label name='name'/>
+        <detailproperties size='150' indexfield='true'/>
+      </field>
+      <field name='project.customer' section='user_project'>
+        <label name='customer'/>
+        <detailproperties size='150'/>
+      </field>
+      <!--////////////////////Liste Berechtigungsgruppen//////////////////// -->
+      <field name='user2securitygroup.id' section='user_securitygroup'>
+        <detailproperties visible='false' keyfield='true' deassignmentkeyfield='true'/>
+      </field>
+      <field name='user2securitygroup.fkuserid' section='user_securitygroup'>
+        <detailproperties visible='false' linkfield='true'/>
+      </field>
+      <field name='securitygroup.name' section='user_securitygroup'>
+        <label name='name'/>
+        <detailproperties size='200'/>
+      </field>
+    </detailview>
+  </detailviews>
+  <!--///////////////////////////////////////////////// -->
+  <!--////////////////////Filterviews////////////////// -->
+  <!--///////////////////////////////////////////////// -->
+  <filterviews>
+    <filterview name='user' head='filter'>
+      <field name='user.lastname' size='180' inputtype='single'/>
+      <field name='user.firstname' size='180' inputtype='single'/>
+      <field name='user.login' size='180' inputtype='single'/>
+      <field name='user.status' size='180' inputtype='combo'>
+        <label name='status'/>
+        <xmllink filepath='masterdata/user_status.xml'/>
+      </field>
+    </filterview>
+  </filterviews>
+  <!--////////////////////////////////////////// -->
+  <!--////////////////////Menü////////////////// -->
+  <!--////////////////////////////////////////// -->
+  <menu>
+    <head name='filter'>
+      <headln labelname='users'/>
+      <desc>
+        <row labelname='filter'/>
+      </desc>
+    </head>
+    <head name='list'>
+      <headln labelname='users'/>
+      <desc>
+        <row labelname='list'/>
+      </desc>
+    </head>
+    <head name='detail'>
+      <headln labelname='users'/>
+      <desc>
+        <row labelname='detail'/>
+      </desc>
+    </head>
+  </menu>
+  <!--////////////////////////////////////////// -->
+  <!--//////////////Printviews////////////////// -->
+  <!--////////////////////////////////////////// -->
+  <printviews/>
+</view>
