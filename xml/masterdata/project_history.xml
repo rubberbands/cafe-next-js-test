@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<view xmlns='http://www.commsult.de' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.commsult.de http://schema.commsult.de/cafe-view.xsd'>
+  <!--//////////////////////////////////////////////// -->
+  <!--////////////////////Sections//////////////////// -->
+  <!--//////////////////////////////////////////////// -->
+  <sections>
+    <section position='1' key='project_history' type='normal' labelname='project_history'/>
+  </sections>
+  <!--//////////////////////////////////////////////// -->
+  <!--////////////////////Detailviews///////////////// -->
+  <!--//////////////////////////////////////////////// -->
+  <detailviews>
+    <!--////////////////////Detailview Project//////////////////// -->
+    <detailview name='project_historydetail' head='detail' savelink='false' dellink='false'>
+      <field name='project_history.id' section='project_history'>
+        <detailproperties visible='false' keyfield='true'/>
+      </field>
+      <field name='project_history.type' section='project_history'>
+        <label name='type'/>
+        <detailproperties row='1' col='1' size='200' type='text' editable='false'/>
+      </field>
+      <field name='project_history.fkuserid' section='project_history'>
+        <label name='user'/>
+        <detailproperties row='1' col='2' size='200' type='text' editable='false'/>
+        <link keyfield='user.id' outputfield='$user.lastname$, $user.firstname$'/>
+      </field>
+      <field name='project_history.fkprojectid' section='project_history'>
+        <label name='project'/>
+        <detailproperties row='1' col='3' size='250' type='text' editable='false'/>
+        <link keyfield='project.id' outputfield='project.name'/>
+      </field>
+      <field name='project_history.date' section='project_history'>
+          <label name='date'/>
+          <detailproperties row='1' col='4' size='200' type='text' editable='false'/>
+      </field>
+      <field name='project_history.description' section='project_history'>
+        <label name='description'/>
+        <detailproperties row='4' col='1' size='450' type='memo' memorows='5'/>
+        </field>
+    </detailview>
+  </detailviews>
+  <!--///////////////////////////////////////////////// -->
+  <!--////////////////////Filterviews////////////////// -->
+  <!--///////////////////////////////////////////////// -->
+  <filterviews>
+    <filterview name='project_history'>
+      <field name='project_history.type' size='100' inputtype='single'>
+        <label name='name'/>
+      </field>
+      <field name='project_history.fkprojectid' size='100' inputtype='combo'>
+        <label name='project'/>
+        <link keyfield='project.id' outputfield='project.name'/>
+      </field>
+      <field name='project_history.fkuserid' size='100' inputtype="combo">
+        <label name='category'/>
+        <link keyfield='user.id' outputfield='$user.lastname$, $user.firstname$'/>
+      </field>
+    </filterview>
+  </filterviews>
+  <!--////////////////////////////////////////// -->
+  <!--////////////////////Menü////////////////// -->
+  <!--////////////////////////////////////////// -->
+  <menu>
+    <head name='filter'>
+      <headln labelname='project_histories'/>
+      <desc>
+        <row labelname='filter'/>
+      </desc>
+    </head>
+    <head name='list'>
+      <headln labelname='project_histories'/>
+      <desc>
+        <row labelname='list'/>
+      </desc>
+    </head>
+    <head name='detail'>
+      <headln labelname='project_histories'/>
+      <desc>
+        <row labelname='detail'/>
+      </desc>
+    </head>
+  </menu>
+</view>

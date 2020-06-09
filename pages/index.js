@@ -75,7 +75,7 @@ export default class extends React.Component {
                     this.state.views.length != 0 ? 
                     (this.state.views.map(
                         (view, key) => 
-                            <Typography key={key} onClick={() => Router.push('/list/[view]', '/list/'+ view)}>
+                            <Typography key={key} onClick={() => Router.push('/filter/[view]', '/filter/'+ view)}>
                                 {view} 
                             </Typography>
                     )) : (

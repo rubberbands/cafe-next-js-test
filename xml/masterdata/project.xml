@@ -1,0 +1,246 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<view xmlns='http://www.commsult.de' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.commsult.de http://schema.commsult.de/cafe-view.xsd'>
+  <!--//////////////////////////////////////////////// -->
+  <!--////////////////////Sections//////////////////// -->
+  <!--//////////////////////////////////////////////// -->
+  <sections>
+    <section position='1' key='projects' type='normal' labelname='projects' dataplugin='project_list'/>
+    <section position='1' key='project' type='normal' labelname='project' dataplugin='project_detail'/>
+    <section position='2' key='project_user' type='list' labelname='users' linkfield='project.id' detailview='userdetail' detailview-view='user' newlink='false' filterview='user' assignmentlink='true' deassignmentlink='true' linktablelinkid='project2user.fkprojectid' linktableoutputid='project2user.fkuserid' detailview-view-head='filter' dataplugin='user_list'/>
+    <section position='3' key='project_user_group' type='list' labelname='user_groups' linkfield='project.id' detailview='user_groupdetail' detailview-view='user_group' newlink='false' filterview='user_group' assignmentlink='true' deassignmentlink='true' linktablelinkid='project2user_group.fkprojectid' linktableoutputid='project2user_group.fkuser_groupid' detailview-view-head='filter' dataplugin='user_group_list'/>
+    <section position='4' key='project_history' sortfield='project_history.date' sortorder='down' type='list' labelname='project_histories' linkfield='project.id' detailview = 'project_historydetail' detailview-view='project_history' newlink='false' assignmentlink='false' deassignmentlink='false' linktablelinkid='project_history.fkprojectid' linktableoutputid='project_history.id' dataplugin='project_history_list'>
+      <datascroller fastStep='5' pageSize='25'/>
+    </section>
+    <section position='5' key='project_secret' type='list' labelname='secrets' linkfield='project.id' detailview='secretdetail' detailview-view='secret' newlink='false' assignmentlink='false' deassignmentlink='false' linktablelinkid='secret.fkprojectid' linktableoutputid='secret.id' dataplugin='secret_list'>
+      <links>
+        <link name='callprompt_secret_add' usesave='true' servlet='prompt' view='prompt_secret_add' visible='true'/>
+      </links>
+    </section>
+    <section type='prompt' key='prompt_secret_add' labelname='prompt_secret_add'>
+      <links>
+        <link name='secret_add' usesave='true' linkplugin='secret_add'/>
+      </links>
+    </section>
+  </sections>
+  <filteroptions newlink='true' detailview='projectdetail' detailview-view='project'/>
+  <listoptions newlink='true' detailview='projectdetail' detailview-view='project'/>
+  <!--//////////////////////////////////////////////// -->
+  <!--////////////////////Listfields////////////////// -->
+  <!--//////////////////////////////////////////////// -->
+  <listfields head='list'>
+    <field name='project.id' section='projects'>
+      <listproperties visible='false' keyfield='true'/>
+    </field>
+    <field name='project.name' section='projects'>
+      <label name='name'/>
+      <listproperties size='200' indexfield='true'/>
+    </field>
+    <field name='project.customer' section='projects'>
+        <label name='customer'/>
+        <listproperties size='200'/>
+    </field>
+    <field name='project.status' section='projects'>
+        <label name='status'/>
+        <xmllink filepath='masterdata/tpm_status.xml'/>
+        <listproperties size='75'/>
+    </field>
+  </listfields>
+  <!--//////////////////////////////////////////////// -->
+  <!--////////////////////Detailviews///////////////// -->
+  <!--//////////////////////////////////////////////// -->
+  <detailviews>
+    <!--////////////////////Detailview Project//////////////////// -->
+    <detailview name='projectdetail' head='detail' savelink='true' dellink='true'>
+      <field name='project.id' section='project'>
+        <detailproperties visible='false' keyfield='true'/>
+      </field>
+      <field name='project.name' section='project'>
+        <label name='name'/>
+        <detailproperties row='1' col='1' size='200' type='text' needed='true'/>
+      </field>
+      <field name='project.customer' section='project'>
+        <label name='customer'/>
+        <detailproperties row='1' col='2' size='200' type='text' needed='true'/>
+      </field>
+      <field name='project.fkcategoryid' section='project'>
+        <label name='category'/>
+        <detailproperties row='1' col='3' size='250' type='combo' editable='true'/>
+        <link keyfield='project_category.id' outputfield='project_category.name'/>
+        <filter field="project_category.status" value="1"/>
+      </field>
+      <field name='project.status' section='project'>
+          <label name='status'/>
+          <detailproperties row='1' col='4' size='200' type='combo' editable='true' needed='true'/>
+          <xmllink filepath='masterdata/tpm_status.xml'/>
+      </field>
+      <field name='project.description' section='project'>
+        <label name='description'/>
+        <detailproperties row='4' col='1' size='450' type='memo' memorows='5'/>
+      </field>
+      <field name='project.adddate' section='project'>
+        <label name='adddate'/>
+        <detailproperties row='10' col='1' size='120' type='text' editable='false'/>
+      </field>
+      <field name='project.fkadduser' section='project'>
+        <label name='adduser'/>
+        <detailproperties row='10' col='2' size='150' type='text' editable='false'/>
+        <link keyfield='user.id' outputfield='$user.lastname$, $user.firstname$'/>
+      </field>
+      <field name='project.changedate' section='project'>
+        <label name='changedate'/>
+        <detailproperties row='10' col='3' size='120' type='text' editable='false'/>
+      </field>
+      <field name='project.fkchangeuser' section='project'>
+        <label name='changeuser'/>
+        <detailproperties row='10' col='4' size='150' type='text' editable='false'/>
+        <link keyfield='user.id' outputfield='$user.lastname$, $user.firstname$'/>
+      </field>
+      <!--////////////////////Linkliste Benutzer//////////////////// -->
+      <field name='project2user.fkprojectid' section='project_user'>
+        <detailproperties visible='false' linkfield='true'/>
+      </field>
+      <field name='project2user.id' section='project_user'>
+        <detailproperties visible='false' deassignmentkeyfield='true'/>
+      </field>
+      <field name='user.id' section='project_user'>
+        <detailproperties visible='false' keyfield='true'/>
+      </field>
+      <field name='user.lastname' section='project_user'>
+        <detailproperties size='150' indexfield='true' visible='${is_admin eq 1}'/>
+      </field>
+      <field name='user_lastname' section='project_user'>
+        <label name='user.lastname'/>
+        <detailproperties size='150' computed='true' visible='${is_admin eq 0}'/>
+      </field>
+      <field name='user.firstname' section='project_user'>
+        <detailproperties size='150'/>
+      </field>
+      <field name='user.login' section='project_user'>
+        <detailproperties size='100'/>
+      </field>
+      <field name='user.status' section='project_user'>
+        <label name='status'/>
+        <detailproperties size='100'/>
+        <xmllink filepath='masterdata/user_status.xml'/>
+      </field>
+      <!--////////////////////Linkliste Benutzergruppe//////////////////// -->
+      <field name='project2user_group.fkprojectid' section='project_user_group'>
+        <detailproperties visible='false' linkfield='true'/>
+      </field>
+      <field name='project2user_group.id' section='project_user_group'>
+        <detailproperties visible='false' deassignmentkeyfield='true'/>
+      </field>
+      <field name='user_group.id' section='project_user_group'>
+        <detailproperties visible='false' keyfield='true'/>
+      </field>
+      <field name='user_group.name' section='project_user_group'>
+        <label name='name'/>
+        <detailproperties size='150' indexfield='true' visible='${is_admin eq 1}'/>
+      </field>
+      <field name='user_group_name' section='project_user_group'>
+        <label name='name'/>
+        <detailproperties size='150' computed='true' visible='${is_admin eq 0}'/>
+      </field>
+      <!--////////////////////Linkliste Projektgeschichten//////////////////// -->
+      <field name='project_history.fkprojectid' section='project_history'>
+        <detailproperties visible='false' linkfield='true'/>
+      </field>
+      <field name='project_history.id' section='project_history'>
+        <detailproperties visible='false' keyfield='true'/>
+      </field>
+      <field name='project_history.date' section='project_history'>
+        <label name='date'/>
+        <detailproperties size='150'/>
+      </field>
+      <field name='project_history_user' section='project_history'>
+        <label name='user'/>
+        <detailproperties size='150' computed='true'/>
+      </field>
+      <field name='project_history.type' section='project_history'>
+        <label name='type'/>
+        <detailproperties size='150'/>
+      </field>
+      <!--////////////////////Linkliste Geheimnisse//////////////////// -->
+      <field name='secret.fkprojectid' section='project_secret'>
+        <detailproperties visible='false' linkfield='true'/>
+      </field>
+      <field name='secret.id' section='project_secret'>
+        <detailproperties visible='false' keyfield='true'/>
+      </field>
+      <field name='secret.name' section='project_secret'>
+        <label name='name'/>
+        <detailproperties size='150' indexfield='true'/>
+      </field>
+      <field name='secret_secret_category' section='project_secret'>
+        <label name='category'/>
+        <detailproperties size='150' computed='true'/>
+      </field>
+      <!--////////////////////Prompt//////////////////// -->
+      <field name='secret_name' section='prompt_secret_add'>
+        <label name='name'/>
+        <detailproperties row='1' col='1' size='500' type='text' computed='true' needed='true' functionlink='secret_add'/>
+      </field>
+      <field name='secret_value' section='prompt_secret_add'>
+        <label name='value'/>
+        <detailproperties row='2' col='1' size='500' type='memo' memorows='5' computed='true' needed='true' functionlink='secret_add'/>
+      </field>
+      <field name='secret_category' section='prompt_secret_add'>
+        <label name='category'/>
+        <detailproperties row='7' col='1' size='180' type='combo' computed='true' functionlink='secret_add'/>
+        <link keyfield='secret_category.id' outputfield='secret_category.name'/>
+      </field>
+      <field name='secret_description' section='prompt_secret_add'>
+        <label name='description'/>
+        <detailproperties row='10' col='1' size='450' type='memo' memorows='5' computed='true' functionlink='secret_add'/>
+      </field>
+      <field name='project.id' section='prompt_secret_add'>
+        <detailproperties visible='false' functionlink='secret_add'/>
+      </field>
+    </detailview>
+  </detailviews>
+  <!--///////////////////////////////////////////////// -->
+  <!--////////////////////Filterviews////////////////// -->
+  <!--///////////////////////////////////////////////// -->
+  <filterviews>
+    <filterview name='project'>
+      <field name='project.name' size='180' inputtype='single'>
+        <label name='name'/>
+      </field>
+      <field name='project.customer' size='180' inputtype='single'>
+        <label name='customer'/>
+      </field>
+      <field name='project.fkcategoryid' size='180' inputtype="combo">
+          <label name='category'/>
+        <link keyfield='project_category.id' outputfield='project_category.name'/>
+      </field>
+      <field name='project.status' size='180' inputtype="combo">
+        <label name='status'/>
+        <xmllink filepath='masterdata/tpm_status.xml'/>
+      </field>
+      <!-- <field name='user.id' size='180' inputtype="single" value="user_id"/> -->
+    </filterview>
+  </filterviews>
+  <!--////////////////////////////////////////// -->
+  <!--////////////////////Menü////////////////// -->
+  <!--////////////////////////////////////////// -->
+  <menu>
+    <head name='filter'>
+      <headln labelname='projects'/>
+      <desc>
+        <row labelname='filter'/>
+      </desc>
+    </head>
+    <head name='list'>
+      <headln labelname='projects'/>
+      <desc>
+        <row labelname='list'/>
+      </desc>
+    </head>
+    <head name='detail'>
+      <headln labelname='projects'/>
+      <desc>
+        <row labelname='detail'/>
+      </desc>
+    </head>
+  </menu>
+</view>

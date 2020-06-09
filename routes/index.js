@@ -107,15 +107,13 @@ module.exports = (server) => {
     }
 
     server.get('/api/views', async (req, res) => {
-        glob('xml/*.xml', function (err, files) {
+        glob('xml/masterdata/*.xml', function (err, files) {
             if (err) {
                 console.log(err);
             } else {
                 var views = [];
-                console.log(files);
                 for(i = 0; i < files.length; i++) {
                     views.push(path.basename(files[i]).split('.').slice(0, -1).join('.'))
-                    console.log(path.basename(files[i]).split('.').slice(0, -1).join('.'))
                 }
                 res.json({views : views})
             }
@@ -125,7 +123,9 @@ module.exports = (server) => {
     server.post('/api/data', async (req, res) => {
         var column = req.body.column
         var table = req.body.table
+        console.log("QUERY : SELECT " + column + " FROM " + table)
         const results = await getData(column, table)
+        const resultsId = await getDataId(table)
         if(results){
             return res.json({data : results[0]})
         } else {
@@ -135,10 +135,44 @@ module.exports = (server) => {
 
     async function getData(column, table) {
         try {
-          const results = await pool.query(`SELECT * FROM ${table}`)
+          const results = await pool.query(`SELECT ${column} FROM ${table}`)
+          console.log(results[0][1].id)
           return results
         }catch(e){
           console.error(e)
         }
     }
+
+    async function getDataId(table) {
+        try {
+          const results = await pool.query(`SELECT id FROM ${table}`)
+          console.log(results[0][0])
+          return results
+        }catch(e){
+          console.error(e)
+        }
+    }
+
+    server.post('/api/data/:id', async (req, res) => {
+        var id = req.params.id
+        var column = req.body.column
+        var table = req.body.table
+        //console.log("QUERY : SELECT " + column + " FROM " + table + " WHERE id = " + id)
+        const results = await getDataById(column, table, id)
+        if(results){
+            return res.json({data : results[0]})
+        } else {
+            return res.json({message: 'No Data'})
+        }
+    })
+
+    async function getDataById(column, table, id) {
+        try {
+          const results = await pool.query(`SELECT ${column} FROM ${table} where id = '${id}'`)
+          return results
+        }catch(e){
+          console.error(e)
+        }
+    }
+
 }

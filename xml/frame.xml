@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<frame cssfile='style/menu.css' screensize='10000' backrequestlistsize='15' messagelistsize='10' title='tpm' messages='true' dbconnectiontype='JAVA' sessioninactiveinterval='18000' fullscreen='none' newwindow='false' xmlns='http://www.commsult.de' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.commsult.de http://schema.commsult.de/cafe-frame.xsd'>
+  <themes>
+    <theme name='xp' builder='XPStyleHtmlBuilder' default='true'>
+      <color name='red' default='true'/>
+      <color name='blue'/>
+      <color name='commsult'/>
+      <color name='orange'/>
+    </theme>
+  </themes>
+  <locales>
+    <supported_langs>
+      <lang name='en'/>
+      <lang name='de'/>
+    </supported_langs>
+    <locale name='defaultlanguage' value='en'/>
+    <locale name='login_language_select' value='true'/>
+    <locale name='return_defaultlanguagelabel_if_missing' value='false'/>
+  </locales>
+  <listoptions rownumber='50' innerindexnumber='10' outerindexnumber='3'/>
+  <detailoptions dellinkconfirm='true' backlinkconfirm='true' functionlinkconfirm='false' allowedsections='20'/>
+  <usedviews>
+    <!-- Masterdata -->
+    <view name='user' url='masterdata/user.xml'/>
+    <view name='team' url='masterdata/team.xml'/>
+    <view name='user_group' url='masterdata/user_group.xml'/>
+    <view name='project' url='masterdata/project.xml'/>
+    <view name='project_category' url='masterdata/project_category.xml'/>
+    <view name='project_history' url='masterdata/project_history.xml'/>
+    <view name='secret' url='masterdata/secret.xml'/>
+    <view name='secret_category' url='masterdata/secret_category.xml'/>
+    <view name='email_log' url='masterdata/email_log.xml'/>
+    <!-- Masterdata Security -->
+    <view name='securitygroup' url='/masterdata/security/securitygroup.xml'/>
+    <view name='securityobject' url='/masterdata/security/securityobject.xml'/>
+    <view name='securityright' url='/masterdata/security/securityright.xml'/>
+  </usedviews>
+  <loginlink url='Control'>
+    <params>
+      <param name='servlet' value='menu'/>
+      <param name='menu' value='mainmenu'/>
+    </params>
+  </loginlink>
+  <!-- <portal type='plugin' classname='de.commsult.tpm.plugins.faceplugins.PortalPlugin'/> -->
+  <menus>
+    <!-- Hauptmenue -->
+    <menu name='mainmenu'>
+      <head>
+        <headln labelname='mainmenu'/>
+        <desc>
+          <row labelname='tpm_welcome'/>
+        </desc>
+      </head>
+      <links>
+        <link url='Control' name='masterdata_project'>
+          <label name='projects'/>
+          <params>
+            <param name='servlet' value='filter'/>
+            <param name='view' value='project'/>
+            <param name='filterview' value='project'/>
+            <param name='head' value='filter'/>
+          </params>
+        </link>
+        <link url='Control' name='mainmenu_masterdata'>
+          <label name='masterdata'/>
+          <params>
+            <param name='servlet' value='menu'/>
+            <param name='menu' value='menu_masterdata'/>
+          </params>
+        </link>
+        <link url='UserSettings' name='usersettings' type='newwindow'>
+          <label name='usersettings'/>
+          <params>
+            <param name='servlet' value='UserSettings'/>
+          </params>
+        </link>
+      </links>
+    </menu>
+    <!-- ########################################### -->
+    <!-- ########################################### -->
+    <!-- ###### Hauptmenu/Stammdaten ############### -->
+    <!-- ########################################### -->
+    <!-- ########################################### -->
+    <menu name='menu_masterdata'>
+      <links>
+        <link url='Control' name='masterdata_user'>
+          <label name='users'/>
+          <params>
+            <param name='servlet' value='filter'/>
+            <param name='view' value='user'/>
+            <param name='filterview' value='user'/>
+            <param name='head' value='filter'/>
+          </params>
+        </link>
+        <link url='Control' name='masterdata_team'>
+          <label name='teams'/>
+          <params>
+            <param name='servlet' value='filter'/>
+            <param name='view' value='team'/>
+            <param name='filterview' value='team'/>
+            <param name='head' value='filter'/>
+          </params>
+        </link>
+        <link url='Control' name='masterdata_user_group'>
+          <label name='user_groups'/>
+          <params>
+            <param name='servlet' value='filter'/>
+            <param name='view' value='user_group'/>
+            <param name='filterview' value='user_group'/>
+            <param name='head' value='filter'/>
+          </params>
+        </link>
+        <link url='Control' name='masterdata_project_category'>
+          <label name='project_categories'/>
+          <params>
+            <param name='servlet' value='filter'/>
+            <param name='view' value='project_category'/>
+            <param name='filterview' value='project_category'/>
+            <param name='head' value='filter'/>
+          </params>
+        </link>
+        <link url='Control' name='masterdata_secret_category'>
+          <label name='secret_categories'/>
+          <params>
+            <param name='servlet' value='filter'/>
+            <param name='view' value='secret_category'/>
+            <param name='filterview' value='secret_category'/>
+            <param name='head' value='filter'/>
+          </params>
+        </link>
+        <link url='Control' name='masterdata_email_log'>
+          <label name='email_log_list'/>
+          <params>
+            <param name='servlet' value='filter'/>
+            <param name='view' value='email_log'/>
+            <param name='filterview' value='email_logs'/>
+            <param name='head' value='filter'/>
+          </params>
+        </link>
+        <link url='Control' name='masterdata_security'>
+          <label name='security'/>
+          <params>
+            <param name='servlet' value='menu'/>
+            <param name='menu' value='menu_security'/>
+          </params>
+        </link>
+        <link url='Control' name='masterdata_server'>
+          <label name='server'/>
+          <params>
+            <param name='servlet' value='menu'/>
+            <param name='menu' value='menu_server'/>
+          </params>
+        </link>
+      </links>
+    </menu>
+    <!-- ########################################### -->
+    <!-- ########################################### -->
+    <!-- ####### Hauptmenu/Stammdaten/Security ##### -->
+    <!-- ########################################### -->
+    <!-- ########################################### -->
+    <menu name='menu_security'>
+      <links>
+        <link url='Control' name='security_securitygroup'>
+          <label name='securitygroups'/>
+          <params>
+            <param name='servlet' value='list'/>
+            <param name='view' value='securitygroup'/>
+            <param name='head' value='list'/>
+          </params>
+        </link>
+        <link url='Control' name='security_securityobjects'>
+          <label name='securityobjects'/>
+          <params>
+            <param name='servlet' value='filter'/>
+            <param name='view' value='securityobject'/>
+            <param name='filterview' value='securityobject'/>
+            <param name='head' value='filter'/>
+          </params>
+        </link>
+      </links>
+    </menu>
+    <!-- ########################################### -->
+    <!-- ########################################### -->
+    <!-- ####### Hauptmenu/Stammdaten/Server ####### -->
+    <!-- ########################################### -->
+    <!-- ########################################### -->
+    <menu name='menu_server'>
+      <links>
+        <link url='Admin' name='server_adminconsole' type='newwindow'>
+          <label name='adminconsole'/>
+          <params/>
+        </link>
+        <link url='WebConsole' name='server_webconsole' type='newwindow'>
+          <label name='webconsole'/>
+          <params/>
+        </link>
+      </links>
+    </menu>
+  </menus>
+  <!-- head -->
+  <headdefaults pic='pictures/basis_logo.png' app='cafe3 Basis' version=''>
+    <headmenulinks>
+      <menulink url='Control' name='head_mainmenu'>
+        <label name='mainmenu'/>
+        <params>
+          <param name='servlet' value='menu'/>
+          <param name='menu' value='mainmenu'/>
+        </params>
+      </menulink>
+      <menulink url='Control' name='head_newbrowserwindow' type='newbrowser'>
+        <label name='newbrowserwindow'/>
+        <params>
+          <param name='servlet' value='menu'/>
+          <param name='frame' value='webom'/>
+          <param name='menu' value='mainmenu'/>
+        </params>
+      </menulink>
+      <!-- <menulink url='Admin' type='newwindow'> <label name='adminconsole'/> </menulink> -->
+      <menulink url='Logout' name='head_logout'>
+        <label name='logout'/>
+      </menulink>
+    </headmenulinks>
+  </headdefaults>
+</frame>

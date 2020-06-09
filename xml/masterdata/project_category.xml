@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<view xmlns='http://www.commsult.de' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='http://www.commsult.de http://schema.commsult.de/cafe-view.xsd'>
+  <!--//////////////////////////////////////////////// -->
+  <!--////////////////////Sections//////////////////// -->
+  <!--//////////////////////////////////////////////// -->
+  <sections>
+    <section position='1' key='project_categories' type='normal' labelname='project_categories'/>
+    <section position='1' key='project_category' type='normal' labelname='project_category'/>
+    <section position='2' key='project_category_project' type='list' labelname='projects' linkfield='project_category.id' detailview='projectdetail' detailview-view='project' newlink='false' filterview='project' assignmentlink='false' deassignmentlink='false' linktablelinkid='project.fkcategoryid' linktableoutputid='project.id' detailview-view-head='filter'/>
+  </sections>
+  <filteroptions newlink='true' detailview='project_categorydetail' detailview-view='project_category'/>
+  <listoptions newlink='true' detailview='project_categorydetail' detailview-view='project_category'/>
+  <!--//////////////////////////////////////////////// -->
+  <!--////////////////////Listfields////////////////// -->
+  <!--//////////////////////////////////////////////// -->
+  <listfields head='list'>
+    <field name='project_category.id' section='project_categories'>
+      <listproperties visible='false' keyfield='true'/>
+    </field>
+    <field name='project_category.name' section='project_categories'>
+      <label name='name'/>
+      <listproperties size='200' indexfield='true'/>
+    </field>
+    <field name='project_category.status' section='project_categories'>
+        <label name='status'/>
+        <xmllink filepath='masterdata/tpm_status.xml'/>
+        <listproperties size='75'/>
+    </field>
+  </listfields>
+  <!--//////////////////////////////////////////////// -->
+  <!--////////////////////Detailviews///////////////// -->
+  <!--//////////////////////////////////////////////// -->
+  <detailviews>
+    <!--////////////////////Detailview Team//////////////////// -->
+    <detailview name='project_categorydetail' head='detail' savelink='true' dellink='true'>
+      <field name='project_category.id' section='project_category'>
+        <detailproperties visible='false' keyfield='true'/>
+      </field>
+      <field name='project_category.name' section='project_category'>
+        <label name='name'/>
+        <detailproperties row='1' col='1' size='250' type='text' needed='true'/>
+      </field>
+      <field name='project_category.status' section='project_category'>
+        <label name='status'/>
+        <detailproperties row='1' col='2' size='200' type='combo' needed='true'/>
+        <xmllink filepath='masterdata/tpm_status.xml'/>
+      </field>
+      <field name='project_category.adddate' section='project_category'>
+        <label name='adddate'/>
+        <detailproperties row='10' col='1' size='120' type='text' editable='false'/>
+      </field>
+      <field name='project_category.fkadduser' section='project_category'>
+        <label name='adduser'/>
+        <detailproperties row='10' col='2' size='150' type='text' editable='false'/>
+        <link keyfield='user.id' outputfield='$user.lastname$, $user.firstname$'/>
+      </field>
+      <field name='project_category.changedate' section='project_category'>
+        <label name='changedate'/>
+        <detailproperties row='10' col='3' size='120' type='text' editable='false'/>
+      </field>
+      <field name='project_category.fkchangeuser' section='project_category'>
+        <label name='changeuser'/>
+        <detailproperties row='10' col='4' size='150' type='text' editable='false'/>
+        <link keyfield='user.id' outputfield='$user.lastname$, $user.firstname$'/>
+      </field>
+      <!--////////////////////Linkliste Projekt//////////////////// -->
+      <field name='project.fkcategoryid' section='project_category_project'>
+        <detailproperties visible='false' linkfield='true'/>
+      </field>
+      <field name='project.id' section='project_category_project'>
+        <detailproperties visible='false' keyfield='true'/>
+      </field>
+      <field name='project.customer' section='project_category_project'>
+        <label name='customer'/>
+        <detailproperties size='200' indexfield='true'/>
+      </field>
+      <field name='project.status' section='project_category_project'>
+        <label name='status'/>
+        <detailproperties size='200'/>
+        <xmllink filepath='masterdata/tpm_status.xml'/>
+      </field>
+    </detailview>
+  </detailviews>
+  <!--///////////////////////////////////////////////// -->
+  <!--////////////////////Filterviews////////////////// -->
+  <!--///////////////////////////////////////////////// -->
+  <filterviews>
+    <filterview name='project_category'>
+      <field name='project_category.name' size='200' inputtype='single'>
+        <label name='name'/>
+      </field>
+      <field name='project_category.status' size='200' inputtype='combo'>
+        <label name='status'/>
+        <xmllink filepath='masterdata/tpm_status.xml'/>
+      </field>
+    </filterview>
+  </filterviews>
+  <!--////////////////////////////////////////// -->
+  <!--////////////////////Menü////////////////// -->
+  <!--////////////////////////////////////////// -->
+  <menu>
+    <head name='filter'>
+      <headln labelname='project_categories'/>
+      <desc>
+        <row labelname='filter'/>
+      </desc>
+    </head>
+    <head name='list'>
+      <headln labelname='project_categories'/>
+      <desc>
+        <row labelname='list'/>
+      </desc>
+    </head>
+    <head name='detail'>
+      <headln labelname='project_categories'/>
+      <desc>
+        <row labelname='detail'/>
+      </desc>
+    </head>
+  </menu>
+</view>

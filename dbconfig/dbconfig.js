@@ -6,6 +6,8 @@ const config = {
   user: 'root',
   database: 'commsult_tpm',
   connectionLimit: 100,
+  supportBigNumbers: true,
+  bigNumberStrings: true
 }
 
 const pool = mysql.createPool(config)
