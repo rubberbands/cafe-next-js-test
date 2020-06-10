@@ -8,6 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button'
 import Router from 'next/router';
 import Link from 'next/link'
@@ -35,9 +36,12 @@ export default class extends React.Component {
         super(props)
         this.state = {
             lists : [],
+            filters : [],
+            filter : [],
             view : '',
             data : []
         }
+        this.filterData = this.filterData.bind(this)
     }
 
     async componentDidMount(){
@@ -48,7 +52,8 @@ export default class extends React.Component {
         .then(response => {
             this.setState({
                 view : view, 
-                lists : response.view.listfields
+                lists : response.view.listfields,
+                filters : response.view.filterviews[0].filterview[0]
             })
             this.getData()
         })
@@ -79,19 +84,63 @@ export default class extends React.Component {
         })
     }
 
-    generateData(){
-
+    filterData(){
+        var filterQuery = []
+        this.state.filters.field.map(filter => {
+            if(typeof this.state[filter.$.name] !== 'undefined' && this.state[filter.$.name] !== '')
+            filterQuery.push(filter.$.name + " = '" + this.state[filter.$.name] + "'")
+        })
+        var column = [];
+        for(var i = 0; i < this.state.lists[0].field.length; i++) {
+            if(!this.state.lists[0].field[i].listproperties[0].$.computed){
+                column.push(this.state.lists[0].field[i].$.name)
+            }
+        }
+        let data = {
+            column : column,
+            table : this.state.view,
+            filter : filterQuery
+        }
+        fetch('/api/data', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers:{
+              'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(response => {
+            this.setState({data : response.data})
+            console.log(this.state.data)
+        })
     }
 
     render(){
         var i
         return(
             <Layout>
-                {/* <br/> */}
-                {/* <Button onClick={() => Router.push('/detail/[view]', '/detail/'+ this.state.view)}>New {this.state.view}</Button> */}
                 <br/>
                 {
-                    this.state.lists.length != 0 ? (
+                    this.state.lists.length != 0 && this.state.filters.length != 0 ? (
+                        <div>
+                        <form>
+                            <div>
+                                {
+                                    this.state.filters.field.map((filter, key) =>
+                                        <div>
+                                        <TextField 
+                                        label = {filter.label ? (filter.label[0].$.name) : (filter.$.name)} 
+                                        value = {this.state[filter.$.name]}
+                                        onChange = {(event) => this.setState({ [filter.$.name] : event.target.value })}
+                                        />
+                                        </div>
+                                    )
+                                }
+                                <br/>
+                                <Button onClick={this.filterData}>Submit</Button>   
+                            </div>
+                        </form>
+                        <br/>
                         <TableContainer component={Paper}>
                             <Table>
                                 <TableHead>
@@ -130,6 +179,7 @@ export default class extends React.Component {
                                 </TableBody>
                             </Table>
                         </TableContainer>
+                        </div>
                     ) : (
                         <span>Loading...</span>
                     )

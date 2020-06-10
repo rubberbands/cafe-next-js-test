@@ -30,35 +30,43 @@ export default class extends React.Component {
         this.state = {
             views : []
         }
-        this.handleDelete = this.handleDelete.bind(this)
+        // this.handleDelete = this.handleDelete.bind(this)
+        import('../xml/frame.xml')
+        .then(res => res)
+        .then(response => {
+            console.log(response.frame.menus)
+            this.setState({
+                views : response.frame.menus[0].menu
+            })
+        })
         console.log(this.state)
     }
 
     async componentDidMount() {
-        this.getViews()
+        // this.getViews()
     }
 
-    getViews(){
-        fetch('/api/views')
-        .then(res => res.json())
-        .then(response => {
-          this.setState({views : response.views})
-        })
-    }
+    // getViews(){
+    //     fetch('/api/views')
+    //     .then(res => res.json())
+    //     .then(response => {
+    //       this.setState({views : response.views})
+    //     })
+    // }
 
-    async handleDelete(e) {
-        e.preventDefault()
-        var id = e.target.value
-        fetch('/api/delete/' + id)
-        .then(async res => {
-            if (res.status === 200) {
-              this.getEmployees()
-            } else {
-                res.json()
-            }
-          })
+    // async handleDelete(e) {
+    //     e.preventDefault()
+    //     var id = e.target.value
+    //     fetch('/api/delete/' + id)
+    //     .then(async res => {
+    //         if (res.status === 200) {
+    //           this.getEmployees()
+    //         } else {
+    //             res.json()
+    //         }
+    //       })
 
-    }
+    // }
 
     render() {
         
@@ -71,17 +79,25 @@ export default class extends React.Component {
                             Main Menu
                         </Typography>
                         <hr/>
-                {
-                    this.state.views.length != 0 ? 
-                    (this.state.views.map(
-                        (view, key) => 
-                            <Typography key={key} onClick={() => Router.push('/filter/[view]', '/filter/'+ view)}>
-                                {view} 
-                            </Typography>
-                    )) : (
-                        <span>none</span>
-                    )
-                }
+                        {/* {
+                            this.state.views.length != 0 ? (this.state.views.map(
+                                (view, key) => 
+                                    <Typography key={key} onClick={() => Router.push('/list/[view]', '/list/'+ view)}>
+                                        {view} 
+                                    </Typography>
+                            )) : (
+                                <span>none</span>
+                            )
+                        } */}
+                        {
+                            this.state.views.length != 0 ? (
+                                this.state.views.map(view =>{
+                                    
+                                })
+                            ) : (
+                                <Typography>none</Typography>
+                            )
+                        }
                     </CardContent>
                 </Card>
             </Layout>

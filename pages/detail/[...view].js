@@ -12,6 +12,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Checkbox from '@material-ui/core/Checkbox';
 import PropTypes from 'prop-types';
 
 function TabPanel(props) {
@@ -155,11 +156,9 @@ export default class extends React.Component {
                         this.state.details[0].detailview[0].field.map((field, index, elements) => {
                             if (field.$.section == tab && field.$.section == this.state.view) {
                                 this.state.data.map(data => {
-                                    prevRow = <TextField label={field.label ? (field.label[0].$.name) : (field.$.name)} defaultValue={(Object.values(data)[index])}/>
-
+                                    <TextField label={field.label ? (field.label[0].$.name) : (field.$.name)} defaultValue={(Object.values(data)[index])}/>
                                     if (!field.detailproperties[0].$.visible) {
                                         if (field.detailproperties[0].$.row != elements[index + 1].detailproperties[0].$.row) {
-
                                             prevRow = <div style={{ display: "inline" }}>
                                                 {prevRow}
                                                 <br />

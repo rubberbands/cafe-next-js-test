@@ -123,9 +123,19 @@ module.exports = (server) => {
     server.post('/api/data', async (req, res) => {
         var column = req.body.column
         var table = req.body.table
-        console.log("QUERY : SELECT " + column + " FROM " + table)
-        const results = await getData(column, table)
-        const resultsId = await getDataId(table)
+        var filter = 1
+        if(req.body.filter){
+            for(i = 0; i < req.body.filter.length; i++){
+                if(i == 0){
+                    filter = req.body.filter[i]
+                } else {
+                    filter = filter + " and " + req.body.filter[i]
+                }
+            }
+        }
+        console.log("QUERY : SELECT " + column + " FROM " + table + " WHERE " + filter)
+        const results = await getData(column, table, filter)
+        //const resultsId = await getDataId(table)
         if(results){
             return res.json({data : results[0]})
         } else {
@@ -133,10 +143,9 @@ module.exports = (server) => {
         }
     })
 
-    async function getData(column, table) {
+    async function getData(column, table, filter) {
         try {
-          const results = await pool.query(`SELECT ${column} FROM ${table}`)
-          console.log(results[0][1].id)
+          const results = await pool.query(`SELECT ${column} FROM ${table} WHERE ${filter}`)
           return results
         }catch(e){
           console.error(e)
