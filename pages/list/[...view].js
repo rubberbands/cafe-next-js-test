@@ -45,13 +45,12 @@ export default class extends React.Component {
     }
 
     async componentDidMount(){
-        var view = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
-        this.setState({view : view})
-        import('../../xml/masterdata/' + view + '.xml')
+        var view = window.location.href.substring(window.location.href.lastIndexOf('list/') + 5);
+        import('../../xml/' + view)
         .then(res => res)
         .then(response => {
             this.setState({
-                view : view, 
+                view : view.substring(view.lastIndexOf('/') + 1, view.indexOf('.xml')), 
                 lists : response.view.listfields,
                 filters : response.view.filterviews[0].filterview[0]
             })
@@ -80,7 +79,6 @@ export default class extends React.Component {
         .then(res => res.json())
         .then(response => {
             this.setState({data : response.data})
-            console.log(this.state.data)
         })
     }
 

@@ -1,31 +1,74 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles';
 import Layout from '../components/Layout';
-import Router from 'next/router';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
+import HomeIcon from "@material-ui/icons/Home";
+import ReceiptIcon from "@material-ui/icons/Receipt";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import DesktopWindowsIcon from "@material-ui/icons/DesktopWindows";
+import SettingsIcon from "@material-ui/icons/Settings";
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import Sidebar from "../components/Sidebar";
 
+function onClick(e, item) {
+    window.alert(JSON.stringify(item, null, 2));
+  }
+  
+//   const items = [
+//     { name: "home", label: "Home", Icon: HomeIcon },
+//     {
+//       name: "billing",
+//       label: "Billing",
+//       Icon: ReceiptIcon,
+//       items: [
+//         { name: "statements", label: "Statements", onClick },
+//         { name: "reports", label: "Reports", onClick }
+//       ]
+//     },
+//     "divider",
+//     {
+//       name: "settings",
+//       label: "Settings",
+//       Icon: SettingsIcon,
+//       items: [
+//         { name: "profile", label: "Profile" },
+//         { name: "insurance", label: "Insurance", onClick },
+//         "divider",
+//         {
+//           name: "notifications",
+//           label: "Notifications",
+//           Icon: NotificationsIcon,
+//           items: [
+//             { name: "email", label: "Email", onClick },
+//             {
+//               name: "desktop",
+//               label: "Desktop",
+//               Icon: DesktopWindowsIcon,
+//               items: [
+//                 { name: "schedule", label: "Schedule" },
+//                 { name: "frequency", label: "Frequency" }
+//               ]
+//             },
+//             { name: "sms", label: "SMS" }
+//           ]
+//         }
+//       ]
+//     }
+//   ];
+
 export default class extends React.Component {
-    
     constructor(props) {
         super(props)
         this.state = {
             views : [],
-            data : [],
-            url : []
+            data : []
         }
     }
 
-    async componentDidMount() {
+    async componentDidMount(){
         import('../xml/frame.xml')
         .then(res => res)
         .then(response => {
             this.setState({
-                views : response.frame.menus[0].menu,
-                url : response.frame.usedviews[0].view
+                views : response.frame.menus[0].menu
             })
             this.setData()
         })
@@ -33,8 +76,8 @@ export default class extends React.Component {
 
     setData(){
         var menus = []
-        
         var objects = this.state.views
+        console.log(this.state.views)
         this.state.views.map(view =>{
             var parentName = ''
             objects.map(object =>{
@@ -49,19 +92,11 @@ export default class extends React.Component {
                 })
             })
             view.links[0].link.map(link => {
-                var url = ''
                 var paramMenu = false;
                 if(link.params[0].param){
                     link.params[0].param.map(param =>{
                         if(param.$.name == "menu"){
                             paramMenu = true
-                        }
-                        if(param.$.name == "view"){
-                            this.state.url.map(urlValue =>{
-                                if(urlValue.$.name == param.$.value){
-                                    url = urlValue.$.url
-                                }
-                            })
                         }
                     })
                 }
@@ -75,7 +110,6 @@ export default class extends React.Component {
                         menus.push({
                             name : name,
                             label : label,
-                            url : url
                         })
                     } else {
                         menus.push({
@@ -89,7 +123,6 @@ export default class extends React.Component {
                         menus.push({
                             name : name,
                             label : label,
-                            url : url,
                             parent : parentName
                         })
                     } else {
@@ -103,6 +136,7 @@ export default class extends React.Component {
                 }
             })
         })
+        console.log(menus)
         var menus2 = menus
         var data = []
         menus.map(menu =>{
@@ -123,29 +157,25 @@ export default class extends React.Component {
         this.setState({
             data : data
         })
-        console.log(this.state.data)
+        console.log("data : ")
+        data.map(datum => {
+            console.log(datum)
+        })
     }
 
-    render() {
-        
+    render(){
+        var items = this.state.data
+        console.log("items : ")
+        console.log(items)
         return(
-            <Layout {...this.props}>
-                <br/>
-                <Card style={{maxWidth: 275}}>
-                    <CardContent>
-                        <Typography variant="h6" component="h2">
-                            Main Menu
-                        </Typography>
-                        <hr/>
-                        {
-                            this.state.data.length != 0 ? (
-                                <Sidebar items={this.state.data} />
-                            ) : (
-                                <Typography>Loading...</Typography>
-                            )
-                        }
-                    </CardContent>
-                </Card>
+            <Layout>
+                {
+                    this.state.data.length != 0 ? (
+                        <Sidebar items={this.state.data} />
+                    ) : (
+                        <Typography>Loading...</Typography>
+                    )
+                }
             </Layout>
         )
     }

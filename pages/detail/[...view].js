@@ -134,7 +134,7 @@ export default class extends React.Component {
     }
 
     printTab() {
-        return <Tabs value={this.state.value} onChange={this.handleChange} aria-label="simple tabs example">
+        return <Tabs value={this.state.value} onChange={this.handleChange}>
         {
             this.state.tab.length != 0 ? (
                 this.state.tab.map((tab, key) => {
@@ -156,7 +156,7 @@ export default class extends React.Component {
                         this.state.details[0].detailview[0].field.map((field, index, elements) => {
                             if (field.$.section == tab && field.$.section == this.state.view) {
                                 this.state.data.map(data => {
-                                    <TextField label={field.label ? (field.label[0].$.name) : (field.$.name)} defaultValue={(Object.values(data)[index])}/>
+                                    prevRow = <TextField label={field.label ? (field.label[0].$.name) : (field.$.name)} defaultValue={(Object.values(data)[index])}/>
                                     if (!field.detailproperties[0].$.visible) {
                                         if (field.detailproperties[0].$.row != elements[index + 1].detailproperties[0].$.row) {
                                             prevRow = <div style={{ display: "inline" }}>
